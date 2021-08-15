@@ -74,7 +74,7 @@ try:
 				#orgline = line
 				for i in range(0,len(items)):
 					if items[i].startswith('E'):
-						items[i] = 'E' + str( round( float( items[i][1:] ) * extr_mult, 6 ))
+						items[i] = 'E' + '{:f}'.format( float( items[i][1:] ) * extr_mult)
 					line = ' '.join(items) + "\n"# + ' ; mult ' + str(extr_mult)
 				#import pdb; pdb.set_trace()
 
