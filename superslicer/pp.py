@@ -3,7 +3,7 @@ import sys, re, time
 
 #############
 #	accel, acceltodecel, squarecorner
-travel = [ 4000, 4000, 5 ]
+travel = [ 5000, 5000, 5 ]
 
 #############
 output = []
