@@ -19,7 +19,7 @@ content = gcode.read()
 
 alltravels = re.findall('G1 X\d+.\d+ Y\d+.\d+ F(\d+.\d+?)', content)
 alltravels.append('4711')
-travelspeed = str(max([ float(x) for x in  alltravels ]))
+travelspeed = str(max([ int(x) for x in  alltravels ]))
 
 extr_trigger = False
 extr_mult = 1.0
