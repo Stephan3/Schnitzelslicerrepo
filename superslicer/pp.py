@@ -1,5 +1,5 @@
 
-import sys, re, time
+import sys, re, time, os
 
 #############
 #	accel, acceltodecel, squarecorner
@@ -19,19 +19,34 @@ content = gcode.read()
 
 alltravels = re.findall('G1 X\d+.\d+ Y\d+.\d+ F(\d+.\d+?)', content)
 alltravels.append('4711')
-travelspeed = str(max([ int(x) for x in  alltravels ]))
+travelspeed = str(max([ int(float(x)) for x in alltravels ]))
+
+#import pdb; pdb.set_trace()
 
 extr_trigger = False
 extr_mult = 1.0
-more_extrusion = {
-	';TYPE:Perimeter': 1.0 ,
-	';TYPE:External perimeter': 1.0, #1.035,
-	';TYPE:Gap fill': 1.0 ,
+if os.environ['SLIC3R_FILAMENT_SETTINGS_ID'] == '"ABS _ ESUN ABS+ black"':
+	more_extrusion = {
+		';TYPE:Perimeter': 1.0 ,
+		';TYPE:External perimeter': 0.98,
+		';TYPE:Gap fill': 1.0 ,
 
-	';TYPE:Solid infill': 1.0 ,
-	';TYPE:Internal infill': 1.0 ,
-	';TYPE:Top solid infill': 1.0
-}
+		';TYPE:Solid infill': 1.0 ,
+		';TYPE:Internal infill': 1.0 ,
+		';TYPE:Top solid infill': 1.0
+	}
+else:
+	more_extrusion = {
+		';TYPE:Perimeter': 1.0 ,
+		';TYPE:External perimeter': 1.00,
+		';TYPE:Gap fill': 1.0 ,
+
+		';TYPE:Solid infill': 1.0 ,
+		';TYPE:Internal infill': 1.0 ,
+		';TYPE:Top solid infill': 1.0
+	}
+
+#import pdb; pdb.set_trace()
 
 try:
 	with open( sys.argv[1] , 'r' ) as fp:  
@@ -74,7 +89,7 @@ try:
 				#orgline = line
 				for i in range(0,len(items)):
 					if items[i].startswith('E'):
-						items[i] = 'E' + '{:f}'.format( float( items[i][1:] ) * extr_mult)
+						items[i] = 'E' + str( round( float( items[i][1:] ) * extr_mult, 6 ))
 					line = ' '.join(items) + "\n"# + ' ; mult ' + str(extr_mult)
 				#import pdb; pdb.set_trace()
 
